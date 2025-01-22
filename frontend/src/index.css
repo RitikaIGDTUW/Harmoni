@@ -2,12 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-	background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1)), url("bg2.png");
+/* body {
+	background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url("bg3.jpg");
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
+} */
+
+
+/* Initial body background */
+body {
+    background: url('/bg3.jpg') no-repeat center center/cover;
+    transition: background-image 0.5s ease-in-out;
 }
+
+.bg-toggle {
+    position: fixed;
+    top: 20px;
+    right: 25px;
+}
+
+.toggle-button {
+    background: rgba(255, 255, 255, 0.3);
+    font-weight: 800;
+    font-family: cursive;
+    border: none;
+    padding: 10px;
+    border-radius: 50%; 
+    cursor: pointer;
+    font-size: 22px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px); 
+    transition: transform 0.3s ease, background 0.3s ease; /* Smooth hover effect */
+  }
+  
+  .toggle-button:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.3); 
+  }
+  
+  .toggle-button i {
+    transition: color 0.3s ease;
+  }
+  
+ 
+
 
 /* dark mode looking scrollbar */
 ::-webkit-scrollbar {
