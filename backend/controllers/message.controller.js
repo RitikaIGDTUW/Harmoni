@@ -1,39 +1,42 @@
 import mongoose from "mongoose";
 import Conversation from "../models/conversation.model.js";
 import Message from "../models/message.model.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 
 export const sendMessage = async (req,res)=>{
     try{
         const {message}=req.body;
         const {id:receiverId}=req.params;
-        const senderId=req.user._id;
+        const senderId=req.user._id;    
 
         
-
-        const senderObjectId = new mongoose.Types.ObjectId(senderId);
-        const receiverObjectId = new mongoose.Types.ObjectId(receiverId);
-
         // Check for existing conversation
         let conversation = await Conversation.findOne({
-            participants: { $all: [senderObjectId, receiverObjectId] },
+            participants: { $all: [senderId, receiverId] },
         });
 
         // Create a new conversation if it doesn't exist
         if (!conversation) {
             conversation = await Conversation.create({
-                participants: [senderObjectId, receiverObjectId],
+                participants: [senderId, receiverId],
             });
         }
 
         // Create a new message
         const newMessage = await Message.create({
-            senderId: senderObjectId,
-            receiver: receiverObjectId,
+            senderId,
+            receiverId,
             message,
         });
 
         conversation.messages.push(newMessage._id);
         await conversation.save();
+        
+        //socket io functionality
+        const receiverSocketId=getReceiverSocketId(receiverId);
+        if(receiverSocketId){
+            io.to(receiverSocketId).emit("newMessage",newMessage)
+        }
 
         res.status(201).json(newMessage);
     }
