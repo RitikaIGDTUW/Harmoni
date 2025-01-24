@@ -15,7 +15,7 @@ export const SocketContextProvider=({children})=>{
     useEffect(()=>{
         if(authUser){
            
-            const socket=io("http://localhost:8080",{
+            const socket=io("https://harmoni-floi.onrender.com/",{
                 query:{
                     userId:authUser._id,
                 }
